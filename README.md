@@ -2,11 +2,11 @@
 **LearningByDoingNow/LearningByDoingNow** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 -->
 
-# Hi, there! I'm LearningByDoingNow <img src="https://user-images.githubusercontent.com/71177584/204090535-8da76dcf-df5e-44aa-a9e4-f658f051dcff.gif" width="25px" />
+# Hi, there! I'm Chuang Cheng <img src="https://user-images.githubusercontent.com/71177584/204090535-8da76dcf-df5e-44aa-a9e4-f658f051dcff.gif" width="25px" />
 
 <p align="center">
   <br/>
-  <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Merienda&size=25&pause=1000&center=true&vCenter=true&random=false&width=435&lines=LearningByDoingNow;Practice+Makes+Permanent" alt="Typing SVG" /></a>
+  <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Merienda&size=25&pause=1000&center=true&vCenter=true&random=false&width=435&lines=Chuang+Cheng;LearningByDoingNow" alt="Typing SVG" /></a>
 </p>
 
 <p align="center">
@@ -17,8 +17,8 @@
 
 **I'm a student majoring in CS 👨‍🎓**
 
-- 2024.09-*Present* Xi'an Jiaotong University China MA.Eng.
-- 2020.09-2024.06 Xi'an Jiaotong University China B.Eng.
+- 2025.09-*Present* Computer Network Information Center, CAS — MA.Eng.
+- 2021.09-2025.06 Hebei University of Technology — B.Eng. in IoT Engineering
 - My research direction is RAG and Agent.
 - 💬 Ask me about what you want to ask.
 
@@ -49,6 +49,6 @@
 
 ## <img src="https://img.icons8.com/dusk/64/null/share-2.png" height="20" /> Contact
 
-<a href="mailto:hello@learningbydoingnow.dev" target="_blank"><img alt="GMail" title="GMail" src="https://img.icons8.com/dusk/64/null/gmail.png" width="40"></a>
+<a href="mailto:chengchuang@cnic.cn" target="_blank"><img alt="GMail" title="GMail" src="https://img.icons8.com/dusk/64/null/gmail.png" width="40"></a>
 
 ---

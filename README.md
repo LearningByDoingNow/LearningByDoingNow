@@ -24,7 +24,7 @@
 
 ## <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" height="20" /> GitHub Stats
 
-<p align="center" width="860" />
+<p align="center" width="860">
   <img align="left" src="https://github-readme-stats.vercel.app/api?username=LearningByDoingNow&show_icons=true&theme=default&hide_border=true&include_all_commits=true&count_private=true" height="170" />
   <img align="right" src="https://github-readme-stats.vercel.app/api/top-langs/?username=LearningByDoingNow&theme=default&layout=compact&hide_border=true&langs_count=5&hide=makefile,cmake" height="170" />
 </p>

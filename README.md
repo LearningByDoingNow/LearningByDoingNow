@@ -15,9 +15,9 @@
 
 ## 👨🏻‍💻 About me
 
-**I'm a student majoring in CS 👨‍🎓**
+**I'm a graduate student at UCAS (University of Chinese Academy of Sciences) 👨‍🎓**
 
-- 2025.09-*Present* Computer Network Information Center, CAS — MA.Eng.
+- 2025.09-*Present* Computer Network Information Center, Chinese Academy of Sciences — MA.Eng.
 - 2021.09-2025.06 Hebei University of Technology — B.Eng. in IoT Engineering
 - My research direction is RAG and Agent.
 - 💬 Ask me about what you want to ask.

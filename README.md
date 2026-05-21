@@ -38,13 +38,28 @@
 ### <img src="https://img.icons8.com/dusk/64/null/program.png" height="17" /> Languages & Frameworks
 
 <p align="left">
-  <img src="https://skillicons.dev/icons?i=cpp,py,pytorch,java,vue,react,ts,go,rust,md,latex&theme=light&perline=20" />
+  <img src="https://skillicons.dev/icons?i=c,cpp,py,java,mysql,sqlite,ts,html,css,js,md,latex,langchain&theme=light&perline=13" />
+</p>
+
+<p align="left">
+  <img src="https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white" />
+  <img src="https://img.shields.io/badge/HIP-FF6B00?style=for-the-badge&logo=amd&logoColor=white" />
+  <img src="https://img.shields.io/badge/LLaMA_Factory-1D7C4F?style=for-the-badge&logo=meta&logoColor=white" />
+  <img src="https://img.shields.io/badge/LangGraph-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white" />
 </p>
 
 ### <img src="https://img.icons8.com/dusk/64/null/maintenance.png" height="17" /> Tools & Environments
 
 <p align="left">
-  <img src="https://skillicons.dev/icons?i=docker,git,github,linux,nodejs,langchain,kubernetes,aws,nginx,mysql,redis,vscode&theme=light&perline=20" />
+  <img src="https://skillicons.dev/icons?i=git,linux,docker,vscode&theme=light&perline=4" />
+</p>
+
+<p align="left">
+  <img src="https://img.shields.io/badge/Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white" />
+  <img src="https://img.shields.io/badge/Trae-6C4DFF?style=for-the-badge&logo=trae&logoColor=white" />
+  <img src="https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white" />
+  <img src="https://img.shields.io/badge/Codex_CLI-000000?style=for-the-badge&logo=openai&logoColor=white" />
+  <img src="https://img.shields.io/badge/Gemini_CLI-4285F4?style=for-the-badge&logo=google&logoColor=white" />
 </p>
 
 ## <img src="https://img.icons8.com/dusk/64/null/share-2.png" height="20" /> Contact

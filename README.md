@@ -19,7 +19,7 @@
 
 - 2025.09-*Present* Computer Network Information Center, Chinese Academy of Sciences — MA.Eng.
 - 2021.09-2025.06 Hebei University of Technology — B.Eng. in IoT Engineering
-- My research direction is RAG and Agent.
+- My research focuses on High Performance Computing (HPC) and GPU acceleration optimization.
 - 💬 Ask me about what you want to ask.
 
 ## <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" height="20" /> GitHub Stats

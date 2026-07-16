@@ -26,13 +26,20 @@
 
 ## <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" height="20" /> GitHub Stats
 
-<p align="center" width="860">
-  <img align="left" src="https://github-readme-stats-six-eta-79.vercel.app/api?username=LearningByDoingNow&show_icons=true&theme=default&hide_border=true&include_all_commits=true&count_private=true&cache_seconds=1800&v=20260522" height="170" />
-  <img align="right" src="https://github-readme-stats-six-eta-79.vercel.app/api/top-langs/?username=LearningByDoingNow&theme=default&layout=compact&hide_border=true&langs_count=5&hide=makefile,cmake&cache_seconds=1800&v=20260522" height="170" />
-</p>
+<!-- Use table instead of float align so later sections don't wrap into the stats row -->
+<table>
+  <tr>
+    <td>
+      <img src="https://github-readme-stats-six-eta-79.vercel.app/api?username=LearningByDoingNow&show_icons=true&theme=default&hide_border=true&include_all_commits=true&count_private=true&cache_seconds=1800&v=20260522" height="170" alt="GitHub Stats" />
+    </td>
+    <td>
+      <img src="https://github-readme-stats-six-eta-79.vercel.app/api/top-langs/?username=LearningByDoingNow&theme=default&layout=compact&hide_border=true&langs_count=5&hide=makefile,cmake&cache_seconds=1800&v=20260522" height="170" alt="Top Languages" />
+    </td>
+  </tr>
+</table>
 
 <p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=LearningByDoingNow&theme=flat&column=-1&no-frame=true&v=20260522" width="860"/>
+  <img src="https://github-profile-trophy.vercel.app/?username=LearningByDoingNow&theme=flat&column=-1&no-frame=true&v=20260522" width="860" alt="GitHub Trophies" />
 </p>
 
 ## <img src="https://img.icons8.com/dusk/64/null/development-skill.png" height="20" /> My Skills
@@ -40,28 +47,28 @@
 ### <img src="https://img.icons8.com/dusk/64/null/program.png" height="17" /> Languages & Frameworks
 
 <p align="left">
-  <img src="https://skillicons.dev/icons?i=c,cpp,py,java,mysql,sqlite,ts,html,css,js,md,latex,langchain&theme=light&perline=13" />
+  <img src="https://skillicons.dev/icons?i=c,cpp,py,java,mysql,sqlite,ts,html,css,js,md,latex,langchain&theme=light&perline=13" alt="Languages & Frameworks" />
 </p>
 
 <p align="left">
-  <img src="https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white" />
-  <img src="https://img.shields.io/badge/HIP-FF6B00?style=for-the-badge&logo=amd&logoColor=white" />
-  <img src="https://img.shields.io/badge/LLaMA_Factory-1D7C4F?style=for-the-badge&logo=meta&logoColor=white" />
-  <img src="https://img.shields.io/badge/LangGraph-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white" />
+  <img src="https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white" alt="CUDA" />
+  <img src="https://img.shields.io/badge/HIP-FF6B00?style=for-the-badge&logo=amd&logoColor=white" alt="HIP" />
+  <img src="https://img.shields.io/badge/LLaMA_Factory-1D7C4F?style=for-the-badge&logo=meta&logoColor=white" alt="LLaMA Factory" />
+  <img src="https://img.shields.io/badge/LangGraph-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white" alt="LangGraph" />
 </p>
 
 ### <img src="https://img.icons8.com/dusk/64/null/maintenance.png" height="17" /> Tools & Environments
 
 <p align="left">
-  <img src="https://skillicons.dev/icons?i=git,linux,docker,vscode&theme=light&perline=4" />
+  <img src="https://skillicons.dev/icons?i=git,linux,docker,vscode&theme=light&perline=4" alt="Tools" />
 </p>
 
 <p align="left">
-  <img src="https://img.shields.io/badge/Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white" />
-  <img src="https://img.shields.io/badge/Trae-6C4DFF?style=for-the-badge&logo=trae&logoColor=white" />
-  <img src="https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white" />
-  <img src="https://img.shields.io/badge/Codex_CLI-000000?style=for-the-badge&logo=openai&logoColor=white" />
-  <img src="https://img.shields.io/badge/Gemini_CLI-4285F4?style=for-the-badge&logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white" alt="Cursor" />
+  <img src="https://img.shields.io/badge/Trae-6C4DFF?style=for-the-badge&logo=trae&logoColor=white" alt="Trae" />
+  <img src="https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code" />
+  <img src="https://img.shields.io/badge/Codex_CLI-000000?style=for-the-badge&logo=openai&logoColor=white" alt="Codex CLI" />
+  <img src="https://img.shields.io/badge/Gemini_CLI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini CLI" />
 </p>
 
 ## <img src="https://img.icons8.com/dusk/64/null/share-2.png" height="20" /> Contact

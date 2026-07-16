@@ -39,7 +39,8 @@
 </table>
 
 <p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=LearningByDoingNow&theme=flat&column=-1&no-frame=true&v=20260522" width="860" alt="GitHub Trophies" />
+  <!-- Official github-profile-trophy.vercel.app is DEPLOYMENT_DISABLED (402); use a working public mirror -->
+  <img src="https://github-profile-trophy-psi.vercel.app/?username=LearningByDoingNow&theme=flat&column=-1&no-frame=true&v=20260716" width="860" alt="GitHub Trophies" />
 </p>
 
 ## <img src="https://img.icons8.com/dusk/64/null/development-skill.png" height="20" /> My Skills

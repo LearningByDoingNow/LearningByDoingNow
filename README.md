@@ -48,7 +48,7 @@
 ### <img src="https://img.icons8.com/dusk/64/null/program.png" height="17" /> Languages & Frameworks
 
 <p align="left">
-  <img src="https://skillicons.dev/icons?i=c,cpp,py,java,mysql,sqlite,ts,html,css,js,md,latex,langchain&theme=light&perline=13" alt="Languages & Frameworks" />
+  <img src="https://skillicons.dev/icons?i=c,cpp,py,java,mysql,sqlite,ts,html,css,js,md,latex&theme=light&perline=12" alt="Languages & Frameworks" />
 </p>
 
 <p align="left">
@@ -66,9 +66,9 @@
 
 <p align="left">
   <img src="https://img.shields.io/badge/Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white" alt="Cursor" />
-  <img src="https://img.shields.io/badge/Trae-6C4DFF?style=for-the-badge&logo=trae&logoColor=white" alt="Trae" />
+  <img src="https://img.shields.io/badge/Trae-6C4DFF?style=for-the-badge" alt="Trae" />
   <img src="https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code" />
-  <img src="https://img.shields.io/badge/Codex_CLI-000000?style=for-the-badge&logo=openai&logoColor=white" alt="Codex CLI" />
+  <img src="https://img.shields.io/badge/Codex_CLI-10A37F?style=for-the-badge" alt="Codex CLI" />
   <img src="https://img.shields.io/badge/Gemini_CLI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini CLI" />
 </p>
 

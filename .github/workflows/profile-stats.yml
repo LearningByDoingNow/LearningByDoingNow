@@ -26,23 +26,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Generate GitHub Stats card
-        uses: stats-organization/github-readme-stats-action@v2
-        with:
-          card: stats
-          options: username=${{ github.repository_owner }}&show_icons=true&theme=default&hide_border=true&include_all_commits=true
-          path: profile/stats.svg
-          token: ${{ secrets.PROFILE_STATS_TOKEN }}
-          fail_on_error: true
-
-      - name: Generate Top Languages card
-        uses: stats-organization/github-readme-stats-action@v2
-        with:
-          card: top-langs
-          options: username=${{ github.repository_owner }}&theme=default&layout=compact&langs_count=5&hide=makefile,cmake
-          path: profile/top-langs.svg
-          token: ${{ secrets.PROFILE_STATS_TOKEN }}
-          fail_on_error: true
+      - name: Generate profile cards
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+        run: python3 scripts/generate_profile_stats.py
 
       - name: Commit updated cards
         shell: bash

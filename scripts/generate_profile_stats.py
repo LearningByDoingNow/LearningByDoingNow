@@ -53,6 +53,30 @@ LANGUAGE_COLORS = {
 }
 HIDDEN_LANGUAGES = {"CMake", "Makefile"}
 
+PROFILE_QUERY = """
+query ProfileStats($login: String!) {
+  user(login: $login) {
+    name
+    login
+    pullRequests(first: 1) {
+      totalCount
+    }
+    issues(first: 1) {
+      totalCount
+    }
+    repositoriesContributedTo(
+      first: 1
+      contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]
+    ) {
+      totalCount
+    }
+    contributionsCollection {
+      totalPullRequestReviewContributions
+    }
+  }
+}
+"""
+
 
 class GitHubError(RuntimeError):
     def __init__(self, status: int, message: str):
@@ -66,18 +90,22 @@ class GitHubAPI:
             raise GitHubError(0, "GITHUB_TOKEN is required")
         self.token = token
 
-    def request(self, url: str):
+    def request(self, url: str, payload: dict | None = None):
         if not url.startswith("http"):
             url = urljoin(API_ROOT, url.lstrip("/"))
 
+        data = json.dumps(payload).encode("utf-8") if payload is not None else None
         request = Request(
             url,
+            data=data,
             headers={
                 "Accept": "application/vnd.github+json",
                 "Authorization": f"Bearer {self.token}",
+                "Content-Type": "application/json",
                 "X-GitHub-Api-Version": "2022-11-28",
                 "User-Agent": "LearningByDoingNow-profile-stats",
             },
+            method="POST" if payload is not None else "GET",
         )
         for attempt in range(4):
             try:
@@ -134,6 +162,15 @@ class GitHubAPI:
             url = self.next_link(headers)
         return items
 
+    def graphql(self, query: str, variables: dict):
+        data, _ = self.request(
+            f"{API_ROOT}graphql",
+            {"query": query, "variables": variables},
+        )
+        if data.get("errors"):
+            raise GitHubError(0, data["errors"][0].get("message", "GraphQL error"))
+        return data["data"]
+
 
 def esc(value) -> str:
     return html.escape(str(value), quote=True)
@@ -149,6 +186,8 @@ def write_svg(path: str, body: str, width: int, height: int, title: str, desc: s
     .label {{ font: 600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
     .value {{ font: 700 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
     .language {{ font: 400 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
+    .grade {{ font: 700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
+    .icon {{ fill: none; stroke: #4c71f2; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }}
   </style>
   <rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="8" fill="#fffefe" stroke="#e4e2e2" />
   {body}
@@ -158,21 +197,77 @@ def write_svg(path: str, body: str, width: int, height: int, title: str, desc: s
         output.write(svg)
 
 
-def stats_svg(stats: dict[str, int]):
+def github_rank(stats: dict) -> tuple[str, float]:
+    """Match the familiar github-readme-stats rank using the accurate commit count."""
+
+    def exponential_cdf(value: float) -> float:
+        return 1 - 2 ** -value
+
+    def log_normal_cdf(value: float) -> float:
+        return value / (1 + value)
+
+    percentile = 100 * (
+        1
+        - (
+            2 * exponential_cdf(stats["commits"] / 1000)
+            + 3 * exponential_cdf(stats["prs"] / 50)
+            + exponential_cdf(stats["issues"] / 25)
+            + exponential_cdf(stats["reviews"] / 2)
+            + 4 * log_normal_cdf(stats["stars"] / 50)
+            + log_normal_cdf(stats["followers"] / 10)
+        )
+        / 12
+    )
+    thresholds = [1, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100]
+    levels = ["S", "A+", "A", "A-", "B+", "B", "B-", "C+", "C"]
+    grade = next(
+        level
+        for threshold, level in zip(thresholds, levels)
+        if percentile <= threshold
+    )
+    return grade, percentile
+
+
+def stat_icon(kind: str, y: int) -> str:
+    paths = {
+        "stars": '<polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2" />',
+        "commits": '<path d="M3 12a9 9 0 1 0 3-6.7" /><polyline points="3 3 3 8 8 8" /><polyline points="12 7 12 12 16 14" />',
+        "prs": '<circle cx="6" cy="5" r="2" /><circle cx="6" cy="19" r="2" /><circle cx="18" cy="19" r="2" /><line x1="6" y1="7" x2="6" y2="17" /><path d="M18 17V9a4 4 0 0 0-4-4h-2" /><polyline points="14 2 11 5 14 8" />',
+        "issues": '<circle cx="12" cy="12" r="10" /><line x1="12" y1="7" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />',
+        "contributed": '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />',
+    }
+    return f'<g class="icon" transform="translate(24 {y - 17}) scale(.8)">{paths[kind]}</g>'
+
+
+def stats_svg(stats: dict):
+    grade, percentile = github_rank(stats)
     rows = [
-        ("Repository commits (all branches)", stats["commits"]),
-        ("Repositories scanned", stats["repositories"]),
-        ("Branches scanned", stats["branches"]),
-        ("Total stars", stats["stars"]),
-        ("Followers", stats["followers"]),
+        ("stars", "Total Stars Earned", stats["stars"]),
+        ("commits", "Total Commits", stats["commits"]),
+        ("prs", "Total PRs", stats["prs"]),
+        ("issues", "Total Issues", stats["issues"]),
+        ("contributed", "Contributed to (last year)", stats["contributed_to"]),
     ]
     body = [
-        '<text x="25" y="36" class="title">GitHub Repository Stats</text>',
+        f'<text x="25" y="36" class="title">{esc(stats["name"])}&apos;s GitHub Stats</text>',
     ]
-    for index, (label, value) in enumerate(rows):
-        y = 65 + index * 27
-        body.append(f'<text x="30" y="{y}" class="label">{esc(label)}:</text>')
-        body.append(f'<text x="370" y="{y}" class="value">{esc(value)}</text>')
+    for index, (icon, label, value) in enumerate(rows):
+        y = 68 + index * 25
+        body.append(stat_icon(icon, y))
+        body.append(f'<text x="55" y="{y}" class="label">{esc(label)}:</text>')
+        body.append(f'<text x="292" y="{y}" class="value" text-anchor="end">{esc(value)}</text>')
+    circumference = 2 * 3.14159 * 40
+    progress = 100 - percentile
+    dash_offset = circumference * (1 - progress / 100)
+    body.extend(
+        [
+            '<circle cx="410" cy="108" r="40" fill="none" stroke="#dce9fd" stroke-width="8" />',
+            f'<circle cx="410" cy="108" r="40" fill="none" stroke="#4c71f2" stroke-width="8" '
+            f'stroke-linecap="round" stroke-dasharray="{circumference:.2f}" '
+            f'stroke-dashoffset="{dash_offset:.2f}" transform="rotate(-90 410 108)" />',
+            f'<text x="410" y="118" class="grade" text-anchor="middle">{esc(grade)}</text>',
+        ]
+    )
     return "".join(body)
 
 
@@ -219,6 +314,7 @@ def collect_data(api: GitHubAPI):
     user = api.get("/user")
     if user.get("login", "").casefold() != USERNAME.casefold():
         raise GitHubError(0, "GITHUB_USERNAME does not match the authenticated user")
+    profile = api.graphql(PROFILE_QUERY, {"login": USERNAME})["user"]
 
     repositories = api.get_all(
         "/user/repos",
@@ -262,11 +358,18 @@ def collect_data(api: GitHubAPI):
             commit_keys.update(future.result())
 
     stats = {
+        "name": profile.get("name") or profile["login"],
         "commits": len(commit_keys),
         "repositories": len(repositories),
         "branches": len(branch_tasks),
         "stars": sum(repo.get("stargazers_count", 0) for repo in repositories),
         "followers": user.get("followers", 0),
+        "prs": profile["pullRequests"]["totalCount"],
+        "issues": profile["issues"]["totalCount"],
+        "contributed_to": profile["repositoriesContributedTo"]["totalCount"],
+        "reviews": profile["contributionsCollection"][
+            "totalPullRequestReviewContributions"
+        ],
     }
     return stats, language_sizes
 
@@ -279,8 +382,8 @@ def main():
         stats_svg(stats),
         500,
         205,
-        "GitHub Repository Stats",
-        "All commits across all branches of owned non-fork repositories, deduplicated by repository and SHA.",
+        f"{stats['name']}'s GitHub Stats",
+        "GitHub profile statistics. Commits include all branches of owned non-fork repositories and are deduplicated by repository and SHA.",
     )
     write_svg(
         OUTPUT_LANGS,

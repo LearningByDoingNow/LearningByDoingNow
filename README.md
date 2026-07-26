@@ -30,10 +30,10 @@
 <table>
   <tr>
     <td>
-      <img src="https://github-readme-stats-six-eta-79.vercel.app/api?username=LearningByDoingNow&show_icons=true&theme=default&hide_border=true&include_all_commits=true&count_private=true&cache_seconds=1800&v=20260522" height="170" alt="GitHub Stats" />
+      <img src="./profile/stats.svg" height="170" alt="GitHub Stats" />
     </td>
     <td>
-      <img src="https://github-readme-stats-six-eta-79.vercel.app/api/top-langs/?username=LearningByDoingNow&theme=default&layout=compact&hide_border=true&langs_count=5&hide=makefile,cmake&cache_seconds=1800&v=20260522" height="170" alt="Top Languages" />
+      <img src="./profile/top-langs.svg" height="170" alt="Top Languages" />
     </td>
   </tr>
 </table>

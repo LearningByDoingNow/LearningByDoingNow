@@ -2,8 +2,9 @@
 """Generate repository-local profile statistics cards.
 
 The commit count is intentionally different from GitHub's contribution graph:
-it scans every branch of every repository owned by the authenticated user,
-follows API pagination, and counts each commit SHA once per repository.
+it scans every branch of every non-fork repository owned by the authenticated
+user, follows API pagination, and counts every commit regardless of its author
+name or email. Each commit SHA is counted once per repository.
 """
 
 from __future__ import annotations
@@ -159,7 +160,7 @@ def write_svg(path: str, body: str, width: int, height: int, title: str, desc: s
 
 def stats_svg(stats: dict[str, int]):
     rows = [
-        ("Unique commits (all branches)", stats["commits"]),
+        ("Repository commits (all branches)", stats["commits"]),
         ("Repositories scanned", stats["repositories"]),
         ("Branches scanned", stats["branches"]),
         ("Total stars", stats["stars"]),
@@ -227,6 +228,7 @@ def collect_data(api: GitHubAPI):
         repo
         for repo in repositories
         if repo.get("owner", {}).get("login", "").casefold() == USERNAME.casefold()
+        and not repo.get("fork", False)
     ]
 
     language_sizes = Counter()
@@ -234,8 +236,7 @@ def collect_data(api: GitHubAPI):
 
     for repository in repositories:
         full_name = repository["full_name"]
-        if not repository.get("fork", False):
-            language_sizes.update(api.get(f"/repos/{full_name}/languages"))
+        language_sizes.update(api.get(f"/repos/{full_name}/languages"))
         branches = api.get_all(
             f"/repos/{full_name}/branches", {"per_page": 100}
         )
@@ -246,7 +247,7 @@ def collect_data(api: GitHubAPI):
         try:
             commits = api.get_all(
                 f"/repos/{full_name}/commits",
-                {"sha": branch_name, "author": USERNAME, "per_page": 100},
+                {"sha": branch_name, "per_page": 100},
             )
         except GitHubError as error:
             if error.status == 409:
@@ -279,7 +280,7 @@ def main():
         500,
         205,
         "GitHub Repository Stats",
-        "Unique commits per repository across all branches of all owned repositories.",
+        "All commits across all branches of owned non-fork repositories, deduplicated by repository and SHA.",
     )
     write_svg(
         OUTPUT_LANGS,

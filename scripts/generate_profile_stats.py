@@ -149,6 +149,9 @@ def write_svg(path: str, body: str, width: int, height: int, title: str, desc: s
     .label {{ font: 600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
     .value {{ font: 700 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
     .language {{ font: 400 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
+    .grade {{ font: 700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
+    .grade-label {{ font: 600 11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
+    .grade-score {{ font: 400 10px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #6a737d; }}
   </style>
   <rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="8" fill="#fffefe" stroke="#e4e2e2" />
   {body}
@@ -158,7 +161,30 @@ def write_svg(path: str, body: str, width: int, height: int, title: str, desc: s
         output.write(svg)
 
 
+def activity_rating(stats: dict[str, int]) -> tuple[str, int]:
+    """Return a transparent, stable activity grade for the stats card."""
+    score = round(
+        40 * min(stats["commits"] / 1000, 1)
+        + 20 * min(stats["repositories"] / 20, 1)
+        + 20 * min(stats["stars"] / 100, 1)
+        + 20 * min(stats["followers"] / 50, 1)
+    )
+    thresholds = [
+        (90, "S"),
+        (80, "A+"),
+        (70, "A"),
+        (60, "B+"),
+        (50, "B"),
+        (40, "B-"),
+        (30, "C+"),
+        (20, "C"),
+    ]
+    grade = next((label for minimum, label in thresholds if score >= minimum), "D")
+    return grade, score
+
+
 def stats_svg(stats: dict[str, int]):
+    grade, score = activity_rating(stats)
     rows = [
         ("Repository commits (all branches)", stats["commits"]),
         ("Repositories scanned", stats["repositories"]),
@@ -168,11 +194,25 @@ def stats_svg(stats: dict[str, int]):
     ]
     body = [
         '<text x="25" y="36" class="title">GitHub Repository Stats</text>',
+        '<line x1="340" y1="52" x2="340" y2="181" stroke="#e4e2e2" />',
     ]
     for index, (label, value) in enumerate(rows):
         y = 65 + index * 27
         body.append(f'<text x="30" y="{y}" class="label">{esc(label)}:</text>')
-        body.append(f'<text x="370" y="{y}" class="value">{esc(value)}</text>')
+        body.append(f'<text x="300" y="{y}" class="value" text-anchor="end">{esc(value)}</text>')
+    circumference = 2 * 3.14159 * 40
+    dash_offset = circumference * (1 - score / 100)
+    body.extend(
+        [
+            '<circle cx="420" cy="107" r="40" fill="none" stroke="#dce9fd" stroke-width="8" />',
+            f'<circle cx="420" cy="107" r="40" fill="none" stroke="#2f80ed" stroke-width="8" '
+            f'stroke-linecap="round" stroke-dasharray="{circumference:.2f}" '
+            f'stroke-dashoffset="{dash_offset:.2f}" transform="rotate(-90 420 107)" />',
+            f'<text x="420" y="117" class="grade" text-anchor="middle">{esc(grade)}</text>',
+            '<text x="420" y="169" class="grade-label" text-anchor="middle">Activity Rating</text>',
+            f'<text x="420" y="184" class="grade-score" text-anchor="middle">{score}/100</text>',
+        ]
+    )
     return "".join(body)
 
 
@@ -280,7 +320,7 @@ def main():
         500,
         205,
         "GitHub Repository Stats",
-        "All commits across all branches of owned non-fork repositories, deduplicated by repository and SHA.",
+        "All commits across all branches of owned non-fork repositories, deduplicated by repository and SHA. Activity rating combines commits, repositories, stars, and followers.",
     )
     write_svg(
         OUTPUT_LANGS,

@@ -19,7 +19,8 @@ jobs:
           PROFILE_STATS_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
         run: |
           if [[ -z "$PROFILE_STATS_TOKEN" ]]; then
-            echo "::warning title=PROFILE_STATS_TOKEN is not configured::Add the PROFILE_STATS_TOKEN repository secret to include private repository statistics. Public statistics will still be generated."
+            echo "::error title=PROFILE_STATS_TOKEN is not configured::Add the PROFILE_STATS_TOKEN repository secret before running this workflow. It is required to include private repository statistics."
+            exit 1
           fi
 
       - name: Check out repository
@@ -31,7 +32,7 @@ jobs:
           card: stats
           options: username=${{ github.repository_owner }}&show_icons=true&theme=default&hide_border=true&include_all_commits=true
           path: profile/stats.svg
-          token: ${{ secrets.PROFILE_STATS_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PROFILE_STATS_TOKEN }}
           fail_on_error: true
 
       - name: Generate Top Languages card
@@ -40,7 +41,7 @@ jobs:
           card: top-langs
           options: username=${{ github.repository_owner }}&theme=default&layout=compact&langs_count=5&hide=makefile,cmake
           path: profile/top-langs.svg
-          token: ${{ secrets.PROFILE_STATS_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PROFILE_STATS_TOKEN }}
           fail_on_error: true
 
       - name: Commit updated cards

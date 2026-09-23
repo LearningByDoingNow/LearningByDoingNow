@@ -34,6 +34,7 @@ TOKEN = os.environ.get("GITHUB_TOKEN", "")
 USERNAME = os.environ.get("GITHUB_USERNAME", "")
 OUTPUT_STATS = "profile/stats.svg"
 OUTPUT_LANGS = "profile/top-langs.svg"
+OUTPUT_TROPHIES = "profile/trophies.svg"
 
 LANGUAGE_COLORS = {
     "C": "#555555",
@@ -187,6 +188,9 @@ def write_svg(path: str, body: str, width: int, height: int, title: str, desc: s
     .value {{ font: 700 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
     .language {{ font: 400 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
     .grade {{ font: 700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #434d58; }}
+    .trophy-label {{ font: 600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #57606a; }}
+    .trophy-grade {{ font: 700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }}
+    .trophy-value {{ font: 400 11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill: #6e7781; }}
     .icon {{ fill: none; stroke: #4c71f2; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }}
   </style>
   <rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="8" fill="#fffefe" stroke="#e4e2e2" />
@@ -310,6 +314,70 @@ def languages_svg(languages: Counter[str]):
     return "".join(body)
 
 
+TROPHY_LEVELS = ["SS", "S", "A+", "A", "B+", "B", "C+", "C"]
+TROPHY_COLORS = {
+    "SS": "#e74c3c",
+    "S": "#e67e22",
+    "A+": "#eac100",
+    "A": "#27ae60",
+    "B+": "#2f80ed",
+    "B": "#9b59b6",
+    "C+": "#6e7781",
+    "C": "#8b949e",
+}
+# (label, stats key, thresholds for SS..C, unit shown next to the raw value)
+TROPHIES = [
+    ("Stars", "stars", [10000, 5000, 1000, 500, 100, 50, 10, 0], "stars"),
+    ("Commits", "commits", [3000, 1500, 750, 500, 300, 200, 100, 0], "commits"),
+    ("Pull Requests", "prs", [1000, 500, 250, 100, 50, 30, 10, 0], "PRs"),
+    ("Issues", "issues", [500, 250, 100, 50, 30, 15, 5, 0], "issues"),
+    ("Contributed", "contributed_to", [100, 50, 30, 20, 10, 5, 2, 0], "repos"),
+    ("Followers", "followers", [1000, 500, 250, 100, 50, 20, 10, 0], "followers"),
+    ("Repositories", "repositories", [500, 300, 200, 100, 50, 30, 15, 0], "repos"),
+]
+TROPHY_CELL_WIDTH = 110
+TROPHY_HEIGHT = 110
+
+
+def trophy_rank(value: int, thresholds: list[int]) -> str:
+    return next(
+        level
+        for level, threshold in zip(TROPHY_LEVELS, thresholds)
+        if value >= threshold
+    )
+
+
+def trophies_svg(stats: dict) -> str:
+    """Local replacement for github-profile-trophy, built from collected stats."""
+
+    width = TROPHY_CELL_WIDTH * len(TROPHIES)
+    body = [
+        f'<rect x="1" y="1" width="{width - 2}" height="{TROPHY_HEIGHT - 2}" '
+        f'rx="8" fill="#fffefe" stroke="#e4e2e2" />'
+    ]
+    for index, (label, key, thresholds, unit) in enumerate(TROPHIES):
+        value = stats[key]
+        grade = trophy_rank(value, thresholds)
+        center = index * TROPHY_CELL_WIDTH + TROPHY_CELL_WIDTH // 2
+        if index:
+            divider = index * TROPHY_CELL_WIDTH
+            body.append(
+                f'<line x1="{divider}" y1="16" x2="{divider}" y2="{TROPHY_HEIGHT - 16}" stroke="#eeecec" />'
+            )
+        body.append(
+            f'<text x="{center}" y="32" class="trophy-label" text-anchor="middle">{esc(label)}</text>'
+        )
+        body.append(
+            f'<text x="{center}" y="74" class="trophy-grade" text-anchor="middle" '
+            f'style="fill:{TROPHY_COLORS[grade]}">{esc(grade)}</text>'
+        )
+        body.append(
+            f'<text x="{center}" y="96" class="trophy-value" text-anchor="middle">'
+            f'{esc(value)} {esc(unit)}</text>'
+        )
+    return "".join(body)
+
+
 def collect_data(api: GitHubAPI):
     user = api.get("/user")
     if user.get("login", "").casefold() != USERNAME.casefold():
@@ -392,6 +460,14 @@ def main():
         205,
         "Most Used Languages",
         "Language distribution across owned non-fork repositories, excluding CMake and Makefile.",
+    )
+    write_svg(
+        OUTPUT_TROPHIES,
+        trophies_svg(stats),
+        TROPHY_CELL_WIDTH * len(TROPHIES),
+        TROPHY_HEIGHT,
+        "GitHub Trophies",
+        "Achievement ranks derived from stars, commits, pull requests, issues, contributed repositories, followers and owned repositories.",
     )
     print(
         f"Generated cards: {stats['commits']} unique commits, "
